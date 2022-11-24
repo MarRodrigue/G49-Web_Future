@@ -1,30 +1,27 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Seguro} from '../models';
 import {SeguroRepository} from '../repositories';
 
+@authenticate("admin")
 export class SeguroController {
   constructor(
     @repository(SeguroRepository)
-    public seguroRepository : SeguroRepository,
-  ) {}
+    public seguroRepository: SeguroRepository,
+  ) { }
+
 
   @post('/seguros')
   @response(200, {
@@ -46,7 +43,7 @@ export class SeguroController {
   ): Promise<Seguro> {
     return this.seguroRepository.create(seguro);
   }
-
+  @authenticate.skip()
   @get('/seguros/count')
   @response(200, {
     description: 'Seguro model count',
